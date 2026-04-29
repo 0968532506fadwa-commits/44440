@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyZone Vue - موقعك المتكامل</title>
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3.4.21/dist/vue.esm-browser.js"
+        }
+    }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        :root {
+            --main-bg: #0d0d0d;
+            --accent: #00f5ff;
+            --accent2: #00ff88;
+        }
+        body {
+            background: var(--main-bg);
+            color: white;
+            transition: background 0.6s;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent);
+        }
+        .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav-links button {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 10px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links button.active, .nav-links button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 15px rgba(0,245,255,0.3);
+        }
+
+        .page { min-height: calc(100vh - 75px); padding: 40px 20px; animation: fadeIn 0.5s; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #homePage { display: grid; place-items: center; }
+        .home-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 0 40px rgba(0,245,255,0.15);
+            text-align: center;
+        }
+        .glow-text {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 25px var(--accent);
+            margin-bottom: 10px;
+        }
+        #clock {
+            font-size: 3.2em;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin: 25px 0 10px;
+            color: var(--accent);
+        }
+        #date { opacity: 0.8; margin-bottom: 35px; font-size: 1.1em; }
+        .section-title {
+            margin: 30px 0 15px;
+            font-weight: 600;
+            opacity: 0.95;
+            font-size: 1.1em;
+            text-align: right;
+        }
+        .theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+        .theme-btn {
+            height: 55px;
+            border-radius: 12px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .theme-btn:hover { transform: scale(1.08); border-color: white; }
+        .theme-btn.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
+        .add-color-box { display: flex; gap: 10px; margin-top: 20px; }
+        #hexInput {
+            flex: 1; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
+            color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 16px;
+        }
+        #hexInput:focus { outline: none; border-color: var(--accent); }
+        .add-btn {
+            background: var(--accent);
+            color: #0d0d0d;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #packagesPage.container { max-width: 1200px; margin: 0 auto; }
+        #packagesPage h1 { text-align: center; font-size: 3.2em; margin-bottom: 15px; color: var(--accent2); font-weight: 800; }
+        .tagline { text-align: center; opacity: 0.8; margin-bottom: 60px; font-size: 1.3em; }
+        .pricing-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .plan {
+            background: linear-gradient(145deg, #1a1f3a, #0f1429);
+            border-radius: 20px; padding: 40px 30px; border: 2px solid transparent;
+            position: relative; transition: 0.4s;
+        }
+        .plan:hover { border-color: var(--accent2); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,255,136,0.2); }
+        .popular { border-color: var(--accent2); box-shadow: 0 0 30px rgba(0,255,136,0.3); }
+        .popular::before {
+            content: "الأكثر طلباً 🔥"; position: absolute; top: -15px; right: 30px;
+            background: var(--accent2); color: #0a0e27; padding: 6px 22px;
+            border-radius: 20px; font-weight: 700; font-size: 0.9em;
+        }
+        .plan-name { font-size: 1.6em; color: var(--accent2); margin-bottom: 10px; font-weight: 700; }
+        .plan-price { font-size: 3.2em; font-weight: 800; margin: 25px 0; }
+        .plan-price small { font-size: 0.35em; opacity: 0.7; font-weight: 400; }
+        .feature-list { list-style: none; margin: 35px 0; }
+        .feature-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05em;
+        }
+        .check { color: var(--accent2); font-size: 1.3em; font-weight: 700; }
+        .cross { color: #ff0055; opacity: 0.4; font-size: 1.3em; }
+        .cta-btn {
+            width: 100%; padding: 17px; background: var(--accent2); color: #0a0e27; border: none;
+            border-radius: 12px; font-size: 1.15em; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+
+        #registerPage { display: flex; align-items: center; justify-content: center; }
+        .form-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 50px 45px; border-radius: 24px; width: 100%; max-width: 480px;
+            box-shadow: 0 0 40px rgba(0,245,255,0.15);
+        }
+        .form-box h2 { color: var(--accent); margin-bottom: 35px; font-size: 2.2em; text-align: center; font-weight: 800; }
+        .input-group { margin-bottom: 24px; position: relative; }
+        .input-group input {
+            width: 100%; padding: 15px 16px; background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; font-size: 16px;
+            color: white; transition: 0.3s;
+        }
+        .input-group input:focus { outline: none; border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .input-group input.invalid { border-color: #ff4444; }
+        .input-group label {
+            position: absolute; right: 16px; top: 15px; color: #a0aec0;
+            transition: 0.3s; pointer-events: none; font-weight: 500;
+        }
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -10px; right: 12px; font-size: 13px; background: #1a1a1a;
+            padding: 0 8px; color: var(--accent);
+        }
+        .error-msg { color: #ff6b6b; font-size: 0.9em; margin-top: 6px; }
+        .strength-bar { height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 10px; overflow: hidden; }
+        .strength-fill { height: 100%; width: 0%; transition: 0.4s; }
+        .strength-text { font-size: 0.85em; margin-top: 5px; opacity: 0.7; }
+        .terms-box { display: flex; gap: 12px; align-items: start; margin: 28px 0; }
+        .terms-box input { margin-top: 3px; width: 20px; height: 20px; cursor: pointer; }
+        .terms-box label { font-size: 0.98em; line-height: 1.6; cursor: pointer; }
+        .terms-box a { color: var(--accent); cursor: pointer; text-decoration: underline; font-weight: 600; }
+        .submit-btn {
+            width: 100%; padding: 17px; background: var(--accent); color: #0d0d0d;
+            border: none; border-radius: 12px; font-size: 1.15em; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .success-msg { background: var(--accent2); color: #0a0e27; padding: 15px; border-radius: 10px; text-align: center; margin-top: 20px; font-weight: 600; }
+
+        .modal { display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: #1a1f3a; border: 2px solid var(--accent); padding: 35px; border-radius: 20px; max-width: 500px; text-align: right; }
+        .modal-content h3 { color: var(--accent); margin-bottom: 15px; }
+        .modal-close { margin-top: 20px; padding: 10px 25px; background: var(--accent); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar">
+            <div class="logo">MyZone</div>
+            <div class="nav-links">
+                <button :class="{ active: currentPage === 'homePage' }" @click="currentPage = 'homePage'">الرئيسية</button>
+                <button :class="{ active: currentPage === 'packagesPage' }" @click="currentPage = 'packagesPage'">الحزم الرياضية</button>
+                <button :class="{ active: currentPage === 'registerPage' }" @click="currentPage = 'registerPage'">تسجيل</button>
+            </div>
+        </nav>
+
+        <div v-if="currentPage === 'homePage'" id="homePage" class="page">
+            <div class="home-card">
+                <h1 class="glow-text">حياك الله يا رفا</h1>
+                <p style="opacity:0.85">مساحتك الخاصة للإبداع والتنظيم</p>
+                <div id="clock">{{ time }}</div>
+                <div id="date">{{ date }}</div>
+                <h3 class="section-title">اختر الثيم:</h3>
+                <div class="theme-grid">
+                    <div v-for="theme in themes" :key="theme.color" class="theme-btn" :class="{ active: mainBg === theme.color }" :style="{ background: theme.color }" @click="setTheme(theme.color)"></div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="currentPage === 'packagesPage'" id="packagesPage" class="page">
+            <div class="container">
+                <h1>باقات التدريب</h1>
+                <div class="pricing-table">
+                    <div v-for="plan in packages" :key="plan.name" class="plan" :class="{ popular: plan.popular }">
+                        <h3 class="plan-name">{{ plan.name }}</h3>
+                        <div class="plan-price">{{ plan.price }}<small> ر.س</small></div>
+                        <ul class="feature-list">
+                            <li v-for="f in plan.features" :key="f.text">
+                                <span :class="f.included ? 'check' : 'cross'">{{ f.included ? '✓' : '✗' }}</span> {{ f.text }}
+                            </li>
+                        </ul>
+                        <button class="cta-btn" @click="selectPackage(plan.name)">اختيار</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="currentPage === 'registerPage'" id="registerPage" class="page">
+            <div class="form-box">
+                <h2>إنشاء حساب</h2>
+                <form @submit.prevent="submitForm">
+                    <div class="input-group">
+                        <input type="text" v-model="form.username" placeholder=" " @input="validateField('username')">
+                        <label>اسم المستخدم</label>
+                        <div v-if="errors.username" class="error-msg">{{ errors.username }}</div>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" v-model="form.email" placeholder=" " @input="validateField('email')">
+                        <label>البريد الإلكتروني</label>
+                        <div v-if="errors.email" class="error-msg">{{ errors.email }}</div>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" v-model="form.password" placeholder=" " @input="validateField('password')">
+                        <label>كلمة المرور</label>
+                        <div class="strength-bar">
+                            <div class="strength-fill" :style="{ width: passwordStrength.width, background: passwordStrength.color }"></div>
+                        </div>
+                        <div class="strength-text" :style="{ color: passwordStrength.color }">{{ passwordStrength.text }}</div>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" v-model="form.confirmPass" placeholder=" " @input="validateField('confirmPass')">
+                        <label>تأكيد كلمة المرور</label>
+                        <div v-if="errors.confirmPass" class="error-msg">{{ errors.confirmPass }}</div>
+                    </div>
+                    <div class="terms-box">
+                        <input type="checkbox" v-model="agreeTerms">
+                        <label @click="showModal = true">أوافق على <a>الشروط والأحكام</a></label>
+                    </div>
+                    <button type="submit" class="submit-btn" :disabled="!isFormValid">إنشاء الحساب</button>
+                    <div v-if="showSuccess" class="success-msg">✅ تم التسجيل بنجاح!</div>
+                </form>
+            </div>
+        </div>
+
+        <div v-if="showModal" class="modal" @click.self="showModal = false">
+            <div class="modal-content">
+                <h3>الشروط والأحكام</h3>
+                <p>هذا الموقع مخصص لأغراض التدريب البرمجي. جميع البيانات المدخلة تبقى محلياً في المتصفح.</p>
+                <button class="modal-close" @click="showModal = false">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createApp, ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
+
+        createApp({
+            setup() {
+                const currentPage = ref('homePage');
+                const mainBg = ref(localStorage.getItem('userTheme') || '#0d0d0d');
+                const accent = ref('#00f5ff');
+                const showModal = ref(false);
+                const showSuccess = ref(false);
+                const agreeTerms = ref(false);
+
+                watch(mainBg, (val) => {
+                    document.documentElement.style.setProperty('--main-bg', val);
+                    localStorage.setItem('userTheme', val);
+                });
+
+                const time = ref('');
+                const date = ref('');
+                const updateClock = () => {
+                    const now = new Date();
+                    time.value = now.toLocaleTimeString('ar-SA', { hour12: false });
+                    date.value = now.toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                };
+
+                const themes = ref([{color:'#0d0d0d'}, {color:'#1e0033'}, {color:'#003d4d'}, {color:'#33001a'}]);
+                const setTheme = (c) => mainBg.value = c;
+
+                const packages = ref([
+                    { name: 'المبتدئ', price: 79, features: [{text:'3 تمارين', included:true}, {text:'مدرب خاص', included:false}] },
+                    { name: 'المحترف', price: 199, popular: true, features: [{text:'خطة مخصصة', included:true}, {text:'متابعة يومية', included:true}] }
+                ]);
+
+                const form = reactive({ username:'', email:'', password:'', confirmPass:'' });
+                const errors = reactive({ username:'', email:'', confirmPass:'' });
+
+                const validateField = (f) => {
+                    if(f==='username') errors.username = form.username.length < 3 ? 'الاسم قصير' : '';
+                    if(f==='email') errors.email = !form.email.includes('@') ? 'إيميل غير صحيح' : '';
+                    if(f==='confirmPass') errors.confirmPass = form.password !== form.confirmPass ? 'لا يوجد تطابق' : '';
+                };
+
+                const passwordStrength = computed(() => {
+                    const len = form.password.length;
+                    if(len === 0) return { width:'0%', color:'', text:'' };
+                    if(len < 6) return { width:'30%', color:'#ff4444', text:'ضعيفة' };
+                    if(len < 10) return { width:'60%', color:'#ffaa00', text:'متوسطة' };
+                    return { width:'100%', color:'#00ff88', text:'قوية جداً' };
+                });
+
+                const isFormValid = computed(() => {
+                    return form.username.length >= 3 && form.email.includes('@') && 
+                           form.password.length >= 6 && form.password === form.confirmPass && agreeTerms.value;
+                });
+
+                const submitForm = () => {
+                    showSuccess.value = true;
+                    setTimeout(() => { showSuccess.value = false; currentPage.value = 'homePage'; }, 2000);
+                };
+
+                onMounted(() => { updateClock(); setInterval(updateClock, 1000); });
+
+                return { currentPage, mainBg, themes, setTheme, time, date, packages, form, errors, validateField, passwordStrength, isFormValid, submitForm, agreeTerms, showModal, showSuccess };
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
