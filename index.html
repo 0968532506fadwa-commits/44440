@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة مؤلفات أدهم الشرقاوي الرقمية</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        /* خانة البحث */
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.15);
+        }
+
+        /* شبكة عرض الكتب */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* بطاقة الكتاب */
+        .book-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 180px;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .book-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .book-author {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .read-btn {
+            margin-top: auto;
+            padding: 8px 16px;
+            background-color: #2563eb;
+            color: white;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        /* رسالة عدم وجود نتائج */
+        .no-results {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 40px;
+            color: #64748b;
+            font-size: 18px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📚 مكتبة مؤلفات أدهم الشرقاوي</h1>
+        <p>ابحثي في جميع كتب وتأليفات الكاتب أدهم الشرقاوي واضغطي لقراءة الكتاب مباشرة</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="اكتبي اسم الكتاب للبحث..." onkeyup="searchBooks()">
+        </div>
+    </div>
+
+    <div class="books-grid" id="booksGrid">
+        
+        <!-- كتاب 1 -->
+        <a href="https://archive.org/search.php?query=رسائل+من+القرآن+أدهم+شرقاوي" target="_blank" class="book-card" data-title="رسائل من القرآن" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">📖</div>
+            <div class="book-title">رسائل من القرآن</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 2 -->
+        <a href="https://archive.org/search.php?query=حديث+الصباح+أدهم+شرقاوي" target="_blank" class="book-card" data-title="حديث الصباح" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">🌅</div>
+            <div class="book-title">حديث الصباح</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 3 -->
+        <a href="https://archive.org/search.php?query=حديث+المساء+أدهم+شرقاوي" target="_blank" class="book-card" data-title="حديث المساء" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">🌙</div>
+            <div class="book-title">حديث المساء</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 4 -->
+        <a href="https://archive.org/search.php?query=مع+النبي+أدهم+شرقاوي" target="_blank" class="book-card" data-title="مع النبي" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">✨</div>
+            <div class="book-title">مع النبي</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 5 -->
+        <a href="https://archive.org/search.php?query=للرجال+فقط+أدهم+شرقاوي" target="_blank" class="book-card" data-title="للرجال فقط" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">📘</div>
+            <div class="book-title">للرجال فقط</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 6 -->
+        <a href="https://archive.org/search.php?query=إلى+المتزوجين+أدهم+شرقاوي" target="_blank" class="book-card" data-title="إلى المتزوجين" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">💍</div>
+            <div class="book-title">إلى المتزوجين</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 7 -->
+        <a href="https://archive.org/search.php?query=نبأ+يقين+أدهم+شرقاوي" target="_blank" class="book-card" data-title="نبأ يقين" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">📜</div>
+            <div class="book-title">نبأ يقين</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 8 -->
+        <a href="https://archive.org/search.php?query=كش+ملك+أدهم+شرقاوي" target="_blank" class="book-card" data-title="كش ملك" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">♟️</div>
+            <div class="book-title">كش ملك</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- كتاب 9 -->
+        <a href="https://archive.org/search.php?query=رسائل+من+النبي+أدهم+شرقاوي" target="_blank" class="book-card" data-title="رسائل من النبي" data-author="أدهم شرقاوي (قس بن ساعدة)">
+            <div class="book-cover">📗</div>
+            <div class="book-title">رسائل من النبي</div>
+            <div class="book-author">أدهم شرقاوي</div>
+            <span class="read-btn">قراءة الكتاب 📖</span>
+        </a>
+
+        <!-- رسالة عدم وجود نتائج -->
+        <div class="no-results" id="noResults">لم يتم العثور على كتاب بهذا الاسم 🔍</div>
+    </div>
+
+    <script>
+        function searchBooks() {
+            let input = document.getElementById('searchInput').value.toLowerCase().trim();
+            let cards = document.getElementsByClassName('book-card');
+            let noResults = document.getElementById('noResults');
+            let hasMatch = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].getAttribute('data-title').toLowerCase();
+                let author = cards[i].getAttribute('data-author').toLowerCase();
+
+                if (title.includes(input) || author.includes(input)) {
+                    cards[i].style.display = "flex";
+                    hasMatch = true;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            if (hasMatch) {
+                noResults.style.display = "none";
+            } else {
+                noResults.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
